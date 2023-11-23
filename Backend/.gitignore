@@ -1,0 +1,121 @@
+# ASP.NET
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+obj/
+bin/
+
+# NuGet Packages
+*.nupkg
+packages/
+
+# Visual Studio files
+*.suo
+*.user
+*.sln.docstates
+
+# ReSharper files
+_ReSharper.*/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+msbuild/
+
+# Test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Microsoft Azure Build Output
+csx/
+*.build.csdef
+
+# StyleCop
+StyleCopReport.xml
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.opendb
+*.scc
+
+# Chutzpah Test files
+_Chutzpah*
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+
+# Installshield output folder
+[Ee]xpress/
+
+# DocProject
+DocProject/buildhelp/
+DocProject/Help/*.HxT
+DocProject/Help/*.HxC
+DocProject/Help/*.hhc
+DocProject/Help/*.hhk
+DocProject/Help/*.hhp
+DocProject/Help/Html2
+DocProject/Help/html
+
+# Click-Once
+publish/
+
+# Publish Web Output
+*.[Pp]ublish.xml
+*.azurePubxml
+## TODO: Comment the next line if you want to checkin your
+## web deploy settings but database connection strings (with potential passwords)
+## has to be excluded from being published
+# *.[Pp]ublishSettings
+
+# Windows Azure Build Output
+csx/
+*.build.csdef
+
+# Windows Store app package directory
+AppPackages/
+
+# Others
+sql/
+*.Cache
+ClientBin/
+[Ss]tyle[Cc]op.*
+~$*
+*~
+*.dbmdl
+*.dbproj.schemaview
+*.pfx
+*.publishsettings
+node_modules/
+orleans.codegen.cs
+Generated_Code/
+#endregion
