@@ -11,10 +11,25 @@ export interface paths {
         /** @description Success */
         200: {
           content: {
-            "text/plain": components["schemas"]["Virksomhet"][];
-            "application/json": components["schemas"]["Virksomhet"][];
-            "text/json": components["schemas"]["Virksomhet"][];
+            "text/plain": components["schemas"]["VirksomhetOutputDto"][];
+            "application/json": components["schemas"]["VirksomhetOutputDto"][];
+            "text/json": components["schemas"]["VirksomhetOutputDto"][];
           };
+        };
+      };
+    };
+    put: {
+      requestBody?: {
+        content: {
+          "application/json": components["schemas"]["VirksomhetEditDto"];
+          "text/json": components["schemas"]["VirksomhetEditDto"];
+          "application/*+json": components["schemas"]["VirksomhetEditDto"];
+        };
+      };
+      responses: {
+        /** @description Success */
+        200: {
+          content: never;
         };
       };
     };
@@ -56,15 +71,13 @@ export interface components {
       postnummer?: number;
       poststed?: string | null;
     };
-    Virksomhet: {
+    VirksomhetEditDto: {
       /** Format: int32 */
       id: number;
       /** Format: int32 */
       organisasjonsnummer: number;
       navn: string;
-      /** Format: int32 */
-      adresseId: number;
-      adresse?: components["schemas"]["Adresse"];
+      adresse: components["schemas"]["AdresseInputDto"];
       telefon: string;
       epost: string;
     };
@@ -75,6 +88,16 @@ export interface components {
       adresse?: components["schemas"]["AdresseInputDto"];
       telefon?: string | null;
       epost?: string | null;
+    };
+    VirksomhetOutputDto: {
+      /** Format: int32 */
+      id: number;
+      /** Format: int32 */
+      organisasjonsnummer: number;
+      navn: string;
+      telefon: string;
+      adresse: components["schemas"]["Adresse"];
+      epost: string;
     };
   };
   responses: never;

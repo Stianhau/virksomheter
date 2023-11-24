@@ -25,7 +25,9 @@ function App() {
     }
 
     return (
+      <>
         <DataTable columns={columns} data={res.data} />
+      </>
     )
   }
 

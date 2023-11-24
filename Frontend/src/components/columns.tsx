@@ -1,17 +1,10 @@
-import { ColumnDef } from "@tanstack/react-table"
-import { Button } from "./ui/button"
-import { components } from "@/api/v1"
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "./ui/button";
+import { components } from "@/api/v1";
+import { Dialog, DialogTrigger } from "./ui/dialog";
+import { EditVirksomheter } from "./EditVirksomheter";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
-
-export type Virksomhet = components["schemas"]["Virksomhet"];
+export type Virksomhet = components["schemas"]["VirksomhetOutputDto"];
 
 export const columns: ColumnDef<Virksomhet>[] = [
   // {accessorKey: "id", header: "ID"},
@@ -36,11 +29,26 @@ export const columns: ColumnDef<Virksomhet>[] = [
     header: "Poststed",
   },
   {
+    accessorKey: "adresse.postnummer",
+    header: "Postnummer",
+  },
+  {
     accessorKey: "adresse.adresselinje_1",
     header: "Adresse",
   },
   {
     id: "actions",
-    cell: ({row}) => <Button onClick={() => console.log(row.original)}>View</Button>,
+    cell: ({ row }) => {
+      return (
+        <>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">Edit virksomhet</Button>
+            </DialogTrigger>
+            <EditVirksomheter virksomhet={row.original}/>
+          </Dialog>
+        </>
+      );
+    },
   },
-]
+];
