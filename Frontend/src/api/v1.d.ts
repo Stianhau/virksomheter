@@ -98,6 +98,8 @@ export interface components {
       telefon: string;
       adresse: components["schemas"]["Adresse"];
       epost: string;
+      underAvvikling?: boolean | null;
+      konkurs?: boolean | null;
     };
   };
   responses: never;

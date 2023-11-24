@@ -37,6 +37,14 @@ export const columns: ColumnDef<Virksomhet>[] = [
     header: "Adresse",
   },
   {
+    accessorKey: "konkurs",
+    header: "Konkurs",
+  },
+  {
+    accessorKey: "underAvvikling",
+    header: "Under avvikling",
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       return (

@@ -21,7 +21,10 @@ namespace DTO
         
         [Required]
         public required string Epost { get; set; }
-
+        
+        public bool? UnderAvvikling { get; set; }
+        
+        public bool? Konkurs { get; set; }
         
     }
 }

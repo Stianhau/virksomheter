@@ -2,6 +2,8 @@ using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using client;
+using System.Collections.ObjectModel;
 
 namespace Backend.Controllers;
 
@@ -9,51 +11,79 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class VirksomhetController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
     private readonly ILogger<VirksomhetController> _logger;
 
     private readonly ApplicationDbContext _context;
+
+    private readonly Client _brregClient;
+
+
 
     public VirksomhetController(ILogger<VirksomhetController> logger, ApplicationDbContext context)
     {
         _context = context;
         _logger = logger;
+        var httpClient = new HttpClient();
+        _brregClient = new Client(httpClient);
     }
 
-    private static VirksomhetOutputDto VirksomhetOutPutMap(Virksomhet virksomhet)
+    private async Task<ICollection<VirksomhetOutputDto>> virksomhetOutputDtos(List<Virksomhet> virksomheter)
     {
-        return new VirksomhetOutputDto
-        {
-            Adresse = virksomhet.Adresse,
-            Epost = virksomhet.Epost,
-            Id = virksomhet.Id,
-            Navn = virksomhet.Navn,
-            Organisasjonsnummer = virksomhet.Organisasjonsnummer,
-            Telefon = virksomhet.Telefon
-        };
-    }
+        var col = new Collection<VirksomhetOutputDto>();
 
+        foreach (var virksomhet in virksomheter)
+        {
+            bool? konkurs = null;
+            bool? underAvvikling = null;
+            try
+            {
+                var brregVirksomhet = await _brregClient.HentEnhetAsync(virksomhet.Organisasjonsnummer.ToString());
+                konkurs = brregVirksomhet.Konkurs;
+                underAvvikling = brregVirksomhet.UnderAvvikling;
+            }
+            catch (Exception)
+            {   
+                _logger.LogError("Feil ved henting av virksomhet fra BRREG: {virksomhet.Organisasjonsnummer}", virksomhet.Organisasjonsnummer);
+            }
+            col.Add(new VirksomhetOutputDto
+            {
+                Adresse = virksomhet.Adresse,
+                Epost = virksomhet.Epost,
+                Id = virksomhet.Id,
+                Navn = virksomhet.Navn,
+                Organisasjonsnummer = virksomhet.Organisasjonsnummer,
+                Telefon = virksomhet.Telefon,
+                Konkurs = konkurs,
+                UnderAvvikling = underAvvikling
+            });
+        };
+
+        return col;
+    }
 
     [HttpGet]
     public async Task<ActionResult<ICollection<VirksomhetOutputDto>>> GetVirksomheter()
     {
-        var virksomheter = await _context.Virksomheter.Include(v => v.Adresse).Select(virksomhet => VirksomhetOutPutMap(virksomhet))
-        // new VirksomhetOutputDto
-        // {
-        //     Adresse = virksomhet.Adresse,
-        //     Epost = virksomhet.Epost,
-        //     Id = virksomhet.Id,
-        //     Navn = virksomhet.Navn,
-        //     Organisasjonsnummer = virksomhet.Organisasjonsnummer,
-        //     Telefon = virksomhet.Telefon
-        // })
-        .ToListAsync();
-        if (virksomheter is null) return NotFound();
-        var l = virksomheter;
+        // var virksomheter = await _context.Virksomheter.Include(v => v.Adresse).Select(virksomhet => VirksomhetOutPutMap(virksomhet))
+        // // new VirksomhetOutputDto
+        // // {
+        // //     Adresse = virksomhet.Adresse,
+        // //     Epost = virksomhet.Epost,
+        // //     Id = virksomhet.Id,
+        // //     Navn = virksomhet.Navn,
+        // //     Organisasjonsnummer = virksomhet.Organisasjonsnummer,
+        // //     Telefon = virksomhet.Telefon
+        // // })
+        // .ToListAsync();
+
+        var dbVirksomheter = await _context.Virksomheter.Include(v => v.Adresse).ToListAsync();
+        if (dbVirksomheter is null) return NotFound();
+        var virksomheter = await virksomhetOutputDtos(dbVirksomheter);
+
+        // var k = await _brregClient.HentEnhetAsync("951206091");
+
+        // Console.WriteLine(k.Navn);
+
         return Ok(virksomheter);
     }
 
