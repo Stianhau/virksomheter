@@ -7,7 +7,7 @@ import { AddVirksomhetDialog } from './components/AddVirksomhetDialog'
 function App() {
 
   const getVirksomheter = async () => {
-    return  await client.GET('/Virksomhet')
+    return  await client.GET('/Virksomheter')
   }
 
   const { data: res, isLoading } = useQuery({

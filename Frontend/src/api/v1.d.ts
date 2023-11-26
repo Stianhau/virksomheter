@@ -5,7 +5,7 @@
 
 
 export interface paths {
-  "/Virksomhet": {
+  "/Virksomheter": {
     get: {
       responses: {
         /** @description Success */
@@ -15,21 +15,6 @@ export interface paths {
             "application/json": components["schemas"]["VirksomhetOutputDto"][];
             "text/json": components["schemas"]["VirksomhetOutputDto"][];
           };
-        };
-      };
-    };
-    put: {
-      requestBody?: {
-        content: {
-          "application/json": components["schemas"]["VirksomhetEditDto"];
-          "text/json": components["schemas"]["VirksomhetEditDto"];
-          "application/*+json": components["schemas"]["VirksomhetEditDto"];
-        };
-      };
-      responses: {
-        /** @description Success */
-        200: {
-          content: never;
         };
       };
     };
@@ -49,7 +34,27 @@ export interface paths {
       };
     };
   };
-  "/Virksomhet/{id}": {
+  "/Virksomheter/{id}": {
+    put: {
+      parameters: {
+        path: {
+          id: number;
+        };
+      };
+      requestBody?: {
+        content: {
+          "application/json": components["schemas"]["VirksomhetEditDto"];
+          "text/json": components["schemas"]["VirksomhetEditDto"];
+          "application/*+json": components["schemas"]["VirksomhetEditDto"];
+        };
+      };
+      responses: {
+        /** @description Success */
+        200: {
+          content: never;
+        };
+      };
+    };
     delete: {
       parameters: {
         path: {
@@ -87,10 +92,6 @@ export interface components {
       poststed?: string | null;
     };
     VirksomhetEditDto: {
-      /** Format: int32 */
-      id: number;
-      /** Format: int32 */
-      organisasjonsnummer: number;
       navn: string;
       adresse: components["schemas"]["AdresseInputDto"];
       telefon: string;

@@ -23,7 +23,7 @@ export function DeleteVirksomhetDialog({ id, navn }: deleteVikrsomheterProps) {
   const queryClient = useQueryClient();
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await client.DELETE("/Virksomhet/{id}", {
+      await client.DELETE("/Virksomheter/{id}", {
         params: {
           path: {
             id: id,

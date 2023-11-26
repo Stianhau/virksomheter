@@ -5,12 +5,6 @@ namespace DTO
 {
     public class VirksomhetEditDto{
         [Required]
-        public required int Id { get; set; }
-
-        [Required]
-        public required int Organisasjonsnummer { get; set; }
-        
-        [Required]
         public required string Navn { get; set; }
 
         [Required]

@@ -37,7 +37,6 @@ export function EditVirksomhetForm({
   epost,
   id,
   navn,
-  organisasjonsnummer,
   postnummer,
   poststed,
   telefon,
@@ -57,7 +56,12 @@ export function EditVirksomhetForm({
 
   const mutate = useMutation({
     mutationFn: async (virksomhet: VirksomhetEdit) => {
-      return await client.PUT("/Virksomhet", {
+      return await client.PUT("/Virksomheter/{id}", {
+        params: {
+          path: {
+            id: id,
+          }
+        },
         body: virksomhet,
       });
     },
@@ -72,8 +76,6 @@ export function EditVirksomhetForm({
 
   function onSubmit(values: z.infer<typeof formSchema>): void {
     const virksomhet: VirksomhetEdit = {
-      id: id,
-      organisasjonsnummer: organisasjonsnummer,
       navn: values.navn,
       telefon: values.telefon,
       epost: values.epost,

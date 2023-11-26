@@ -9,15 +9,15 @@ namespace Backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class VirksomhetController : ControllerBase
+public class VirksomheterController : ControllerBase
 {
-    private readonly ILogger<VirksomhetController> _logger;
+    private readonly ILogger<VirksomheterController> _logger;
 
     private readonly ApplicationDbContext _context;
 
     private readonly Client _brregClient;
 
-    public VirksomhetController(ILogger<VirksomhetController> logger, ApplicationDbContext context)
+    public VirksomheterController(ILogger<VirksomheterController> logger, ApplicationDbContext context)
     {
         _context = context;
         _logger = logger;
@@ -91,14 +91,13 @@ public class VirksomhetController : ControllerBase
         await _context.SaveChangesAsync();
     }
 
-    [HttpPut]
-    public async Task<ActionResult> UpdateVirksomhet(VirksomhetEditDto virksomhet)
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateVirksomhet(int id, VirksomhetEditDto virksomhet)
     {
-        var virksomhetToUpdate = await _context.Virksomheter.Include(v => v.Adresse).FirstOrDefaultAsync(v => v.Id == virksomhet.Id);
+        var virksomhetToUpdate = await _context.Virksomheter.Include(v => v.Adresse).FirstOrDefaultAsync(v => v.Id == id);
         if (virksomhetToUpdate is null) return NotFound("Virksomhet not found");
 
         virksomhetToUpdate.Navn = virksomhet.Navn;
-        virksomhetToUpdate.Organisasjonsnummer = virksomhet.Organisasjonsnummer;
         virksomhetToUpdate.Telefon = virksomhet.Telefon;
         virksomhetToUpdate.Epost = virksomhet.Epost;
         virksomhetToUpdate.Adresse.Adresselinje_1 = virksomhet.Adresse.Adresselinje_1;

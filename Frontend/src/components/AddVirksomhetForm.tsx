@@ -47,7 +47,7 @@ export function AddVirksomhetForm() {
 
   const mutate = useMutation({
     mutationFn: async (virksomhet: VirksomhetAdd) => {
-      return await client.POST("/Virksomhet", {
+      return await client.POST("/Virksomheter", {
         body: virksomhet,
       });
     },
