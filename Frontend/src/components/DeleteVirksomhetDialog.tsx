@@ -13,6 +13,7 @@ import { Button } from "./ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client from "@/api";
 import { useState } from "react";
+import { Trash } from "lucide-react";
 
 type deleteVikrsomheterProps = {
   id: number;
@@ -44,8 +45,8 @@ export function DeleteVirksomhetDialog({ id, navn }: deleteVikrsomheterProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpen(true)} variant="outline">
-          Delete
+        <Button onClick={() => setOpen(true)} variant="outline" className="hover:bg-red-500">
+          <Trash/>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

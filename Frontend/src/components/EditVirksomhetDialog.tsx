@@ -10,6 +10,7 @@ import {
 import { EditVirksomhetForm } from "./EditVirksomhetForm";
 import { Virksomhet } from "./columns";
 import { Button } from "./ui/button";
+import { Pencil } from "lucide-react";
 
 type editVikrsomheterProps = {
   virksomhet: Virksomhet;
@@ -19,7 +20,7 @@ export function EditVirksomhetDialog({ virksomhet }: editVikrsomheterProps) {
   return (
     <Dialog>
     <DialogTrigger asChild>
-      <Button variant="outline">Edit</Button>
+      <Button variant="outline"><Pencil/></Button>
     </DialogTrigger>
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
