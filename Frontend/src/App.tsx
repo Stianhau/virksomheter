@@ -8,14 +8,12 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import LogoutButton from "./components/LogoutButton";
 function App() {
   const { getAccessTokenSilently } = useAuth0();
-
   const getVirksomheter = async () => {
-    // const token = await getAccessTokenSilently()
-    // console.log(token)
+    const token = await getAccessTokenSilently()
     return await client.GET("/Virksomheter", {
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
   };
 

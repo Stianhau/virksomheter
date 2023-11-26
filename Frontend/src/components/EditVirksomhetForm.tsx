@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client, { VirksomhetEdit } from "@/api";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const formSchema = z.object({
   navn: z.string().min(1),
@@ -41,6 +42,8 @@ export function EditVirksomhetForm({
   poststed,
   telefon,
 }: EditVirksomhetFormProps) {
+  const { getAccessTokenSilently } = useAuth0();
+  
   const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,6 +59,7 @@ export function EditVirksomhetForm({
 
   const mutate = useMutation({
     mutationFn: async (virksomhet: VirksomhetEdit) => {
+      const token = await getAccessTokenSilently()
       return await client.PUT("/Virksomheter/{id}", {
         params: {
           path: {
@@ -63,6 +67,9 @@ export function EditVirksomhetForm({
           }
         },
         body: virksomhet,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
       });
     },
     onSuccess: (e) => {

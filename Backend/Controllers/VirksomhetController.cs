@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using client;
 using System.Collections.ObjectModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers;
 
@@ -40,7 +41,7 @@ public class VirksomheterController : ControllerBase
                 underAvvikling = brregVirksomhet.UnderAvvikling;
             }
             catch (Exception)
-            {   
+            {
                 _logger.LogError("Feil ved henting av virksomhet fra BRREG: {virksomhet.Organisasjonsnummer}", virksomhet.Organisasjonsnummer);
             }
             virksomheterOutputDto.Add(new VirksomhetOutputDto
@@ -59,6 +60,7 @@ public class VirksomheterController : ControllerBase
         return virksomheterOutputDto;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<ICollection<VirksomhetOutputDto>>> GetVirksomheter()
     {
@@ -69,6 +71,7 @@ public class VirksomheterController : ControllerBase
         return Ok(virksomheter);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task AddVirksomhet(VirksomhetInputDto virksomhet)
     {
@@ -91,6 +94,7 @@ public class VirksomheterController : ControllerBase
         await _context.SaveChangesAsync();
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateVirksomhet(int id, VirksomhetEditDto virksomhet)
     {
@@ -108,9 +112,11 @@ public class VirksomheterController : ControllerBase
 
         return Ok();
     }
-    
+
+    [Authorize]
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteVirksomhet(int id){
+    public async Task<ActionResult> DeleteVirksomhet(int id)
+    {
         var virksomhet = await _context.Virksomheter.FindAsync(id);
         if (virksomhet is null) return NotFound("Virksomhet not found");
         _context.Virksomheter.Remove(virksomhet);

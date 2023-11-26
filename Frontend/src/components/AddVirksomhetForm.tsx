@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client, { VirksomhetAdd } from "@/api";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const formSchema = z.object({
   organisasjonsnummer: z.coerce.number().refine((value) => value.toString().length === 9,{
@@ -31,6 +32,7 @@ const formSchema = z.object({
 });
 
 export function AddVirksomhetForm() {
+  const { getAccessTokenSilently } = useAuth0();
   const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,8 +49,12 @@ export function AddVirksomhetForm() {
 
   const mutate = useMutation({
     mutationFn: async (virksomhet: VirksomhetAdd) => {
+      const token = await getAccessTokenSilently()
       return await client.POST("/Virksomheter", {
         body: virksomhet,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
       });
     },
     onSuccess: (e) => {

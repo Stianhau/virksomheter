@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client from "@/api";
 import { useState } from "react";
 import { Trash } from "lucide-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 type deleteVikrsomheterProps = {
   id: number;
@@ -21,15 +22,21 @@ type deleteVikrsomheterProps = {
 };
 
 export function DeleteVirksomhetDialog({ id, navn }: deleteVikrsomheterProps) {
+  const { getAccessTokenSilently } = useAuth0();
+  
   const queryClient = useQueryClient();
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
+      const token = await getAccessTokenSilently()
       await client.DELETE("/Virksomheter/{id}", {
         params: {
           path: {
             id: id,
           },
         },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
       });
     },
     onSuccess: async () => {
