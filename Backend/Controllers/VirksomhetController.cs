@@ -17,8 +17,6 @@ public class VirksomhetController : ControllerBase
 
     private readonly Client _brregClient;
 
-
-
     public VirksomhetController(ILogger<VirksomhetController> logger, ApplicationDbContext context)
     {
         _context = context;
@@ -29,7 +27,7 @@ public class VirksomhetController : ControllerBase
 
     private async Task<ICollection<VirksomhetOutputDto>> virksomhetOutputDtos(List<Virksomhet> virksomheter)
     {
-        var col = new Collection<VirksomhetOutputDto>();
+        var virksomheterOutputDto = new Collection<VirksomhetOutputDto>();
 
         foreach (var virksomhet in virksomheter)
         {
@@ -45,7 +43,7 @@ public class VirksomhetController : ControllerBase
             {   
                 _logger.LogError("Feil ved henting av virksomhet fra BRREG: {virksomhet.Organisasjonsnummer}", virksomhet.Organisasjonsnummer);
             }
-            col.Add(new VirksomhetOutputDto
+            virksomheterOutputDto.Add(new VirksomhetOutputDto
             {
                 Adresse = virksomhet.Adresse,
                 Epost = virksomhet.Epost,
@@ -58,32 +56,16 @@ public class VirksomhetController : ControllerBase
             });
         };
 
-        return col;
+        return virksomheterOutputDto;
     }
 
     [HttpGet]
     public async Task<ActionResult<ICollection<VirksomhetOutputDto>>> GetVirksomheter()
     {
-        // var virksomheter = await _context.Virksomheter.Include(v => v.Adresse).Select(virksomhet => VirksomhetOutPutMap(virksomhet))
-        // // new VirksomhetOutputDto
-        // // {
-        // //     Adresse = virksomhet.Adresse,
-        // //     Epost = virksomhet.Epost,
-        // //     Id = virksomhet.Id,
-        // //     Navn = virksomhet.Navn,
-        // //     Organisasjonsnummer = virksomhet.Organisasjonsnummer,
-        // //     Telefon = virksomhet.Telefon
-        // // })
-        // .ToListAsync();
-
         var dbVirksomheter = await _context.Virksomheter.Include(v => v.Adresse).ToListAsync();
         if (dbVirksomheter is null) return NotFound();
+
         var virksomheter = await virksomhetOutputDtos(dbVirksomheter);
-
-        // var k = await _brregClient.HentEnhetAsync("951206091");
-
-        // Console.WriteLine(k.Navn);
-
         return Ok(virksomheter);
     }
 
@@ -127,4 +109,14 @@ public class VirksomhetController : ControllerBase
 
         return Ok();
     }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteVirksomhet(int id){
+        var virksomhet = await _context.Virksomheter.FindAsync(id);
+        if (virksomhet is null) return NotFound("Virksomhet not found");
+        _context.Virksomheter.Remove(virksomhet);
+        await _context.SaveChangesAsync();
+        return Ok();
+    }
+
 }

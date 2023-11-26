@@ -1,13 +1,11 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "./ui/button";
 import { components } from "@/api/v1";
-import { Dialog, DialogTrigger } from "./ui/dialog";
-import { EditVirksomheter } from "./EditVirksomheter";
+import { EditVirksomhetDialog } from "./EditVirksomhetDialog";
+import { DeleteVirksomhetDialog } from "./DeleteVirksomhetDialog";
 
 export type Virksomhet = components["schemas"]["VirksomhetOutputDto"];
 
 export const columns: ColumnDef<Virksomhet>[] = [
-  // {accessorKey: "id", header: "ID"},
   {
     accessorKey: "organisasjonsnummer",
     header: "Organisasjonsnummer",
@@ -48,14 +46,10 @@ export const columns: ColumnDef<Virksomhet>[] = [
     id: "actions",
     cell: ({ row }) => {
       return (
-        <>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline">Edit virksomhet</Button>
-            </DialogTrigger>
-            <EditVirksomheter virksomhet={row.original}/>
-          </Dialog>
-        </>
+        <div className="flex gap-2">
+          <EditVirksomhetDialog virksomhet={row.original}/>
+          <DeleteVirksomhetDialog id={row.original.id} navn={row.original.navn}/>
+        </div>
       );
     },
   },

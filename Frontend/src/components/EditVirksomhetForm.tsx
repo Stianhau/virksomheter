@@ -17,20 +17,22 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client, { VirksomhetEdit } from "@/api";
 
 const formSchema = z.object({
-  navn: z.string(),
-  telefon: z.string(),
+  navn: z.string().min(1),
+  telefon: z.string().min(1),
   epost: z.string().email("Must be a valid email"),
-  adresse: z.string(),
-  postnummer: z.coerce.number(),
-  poststed: z.string(),
+  adresse: z.string().min(1),
+  postnummer: z.coerce.number().refine((value) => value.toString().length === 4,{
+    message: "must be a 4 digit number",
+  }),
+  poststed: z.string().min(1),
 });
 
-type EditVirksomheterFormProps = {
+type EditVirksomhetFormProps = {
   id: number;
   organisasjonsnummer: number;
 } & z.infer<typeof formSchema>;
 
-export function EditVirksomheterForm({
+export function EditVirksomhetForm({
   adresse,
   epost,
   id,
@@ -39,7 +41,7 @@ export function EditVirksomheterForm({
   postnummer,
   poststed,
   telefon,
-}: EditVirksomheterFormProps) {
+}: EditVirksomhetFormProps) {
   const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,15 +61,16 @@ export function EditVirksomheterForm({
         body: virksomhet,
       });
     },
-    onSuccess: () => {
+    onSuccess: (e) => {
+      if(!e.error){
         queryClient.invalidateQueries({
           queryKey: ["virksomheter"],
         });
+      }
     }
   });
 
   function onSubmit(values: z.infer<typeof formSchema>): void {
-    console.log("hei");
     const virksomhet: VirksomhetEdit = {
       id: id,
       organisasjonsnummer: organisasjonsnummer,
@@ -96,7 +99,6 @@ export function EditVirksomheterForm({
             <FormControl>
               <Input
                 placeholder={label}
-
                 type={`${fieldName === "postnummer" ? "number" : "text"}`}
                 {...field}
               />
@@ -112,7 +114,7 @@ export function EditVirksomheterForm({
   };
   
   const state = () => {
-    if (mutate.isError) {
+    if (mutate.isError || mutate.data?.error) {
       return "error";
     }
     if (mutate.isSuccess) {
@@ -129,9 +131,9 @@ export function EditVirksomheterForm({
         {field("navn", "Navn")}
         {field("telefon", "Telefon")}
         {field("epost", "Epost")}
-        {field("poststed", "Poststed")}
-        {field("postnummer", "Postnummer")}
         {field("adresse", "Adresse")}
+        {field("postnummer", "Postnummer")}
+        {field("poststed", "Poststed")}
         <div className="flex justify-end">
           <Button className="min-w-[7rem] flex items-center justify-center" type="submit">{state()}</Button>
         </div>

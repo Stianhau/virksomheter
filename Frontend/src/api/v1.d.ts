@@ -49,6 +49,21 @@ export interface paths {
       };
     };
   };
+  "/Virksomhet/{id}": {
+    delete: {
+      parameters: {
+        path: {
+          id: number;
+        };
+      };
+      responses: {
+        /** @description Success */
+        200: {
+          content: never;
+        };
+      };
+    };
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -83,11 +98,11 @@ export interface components {
     };
     VirksomhetInputDto: {
       /** Format: int32 */
-      organisasjonsnummer?: number;
-      navn?: string | null;
-      adresse?: components["schemas"]["AdresseInputDto"];
-      telefon?: string | null;
-      epost?: string | null;
+      organisasjonsnummer: number;
+      navn: string;
+      adresse: components["schemas"]["AdresseInputDto"];
+      telefon: string;
+      epost: string;
     };
     VirksomhetOutputDto: {
       /** Format: int32 */

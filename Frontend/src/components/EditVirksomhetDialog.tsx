@@ -1,19 +1,26 @@
 import {
+  Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
   // DialogTrigger,
 } from "@/components/ui/dialog";
-import { EditVirksomheterForm } from "./EditVirksomheterForm";
+import { EditVirksomhetForm } from "./EditVirksomhetForm";
 import { Virksomhet } from "./columns";
+import { Button } from "./ui/button";
 
 type editVikrsomheterProps = {
   virksomhet: Virksomhet;
 };
 
-export function EditVirksomheter({ virksomhet }: editVikrsomheterProps) {
+export function EditVirksomhetDialog({ virksomhet }: editVikrsomheterProps) {
   return (
+    <Dialog>
+    <DialogTrigger asChild>
+      <Button variant="outline">Edit</Button>
+    </DialogTrigger>
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
         <DialogTitle>Edit virksomhet</DialogTitle>
@@ -22,7 +29,7 @@ export function EditVirksomheter({ virksomhet }: editVikrsomheterProps) {
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
-        <EditVirksomheterForm
+        <EditVirksomhetForm
           epost={virksomhet.epost}
           id={virksomhet.id}
           adresse={virksomhet.adresse.adresselinje_1}
@@ -34,5 +41,6 @@ export function EditVirksomheter({ virksomhet }: editVikrsomheterProps) {
         />
       </div>
     </DialogContent>
+    </Dialog>
   );
 }
