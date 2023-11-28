@@ -37,13 +37,13 @@ export function AddVirksomhetForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      organisasjonsnummer: 123456789,
-      navn: "e",
-      telefon: "94567890",
-      epost: "e@e.no",
-      poststed: "lalala",
-      postnummer: 1234,
-      adresse: "bbb",
+      organisasjonsnummer: 951206091,
+      navn: "NORGES SILDESALGSLAG SA",
+      telefon: "123456789",
+      epost: "demo@sildelaget.no",
+      poststed: "BERGEN",
+      postnummer: 5003,
+      adresse: "Slottsgaten 3",
     },
   });
 

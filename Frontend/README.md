@@ -33,4 +33,10 @@ export default {
 # Update client:
 ```bash
 npx openapi-typescript http://localhost:5129/swagger/v1/swagger.json -o src/api/v1.d.ts      
+
+
+
+```bash
+http://localhost:5173/
+http://localhost:5129/swagger/index.html
 ```

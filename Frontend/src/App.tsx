@@ -29,16 +29,15 @@ function App() {
     if (isLoading) {
       return <div>Loading...</div>;
     }
-    if (!res?.data) {
-      return <div>No data</div>;
-    }
 
     return (
       <div className="flex flex-col gap-2">
         <div className="flex justify-end">
           <LogoutButton />
         </div>
-        <DataTable columns={columns} data={res.data} />
+        {res?.data &&
+          <DataTable columns={columns} data={res.data} />
+        }
         <div className="flex justify-center">
           <AddVirksomhetDialog />
         </div>
